@@ -1,0 +1,35 @@
+[package]
+name = "communicator"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["rlib", "cdylib", "staticlib"]
+name = "communicator"
+
+[features]
+default = []
+uniffi-cli = ["uniffi/cli"]
+
+[dependencies]
+anyhow = "1.0.91"
+megalodon = "0.13.9"
+serde = { version = "1.0.214", features = ["derive"] }
+serde_json = "1.0.132"
+sqlx = { version = "0.8.2", features = ["runtime-tokio", "sqlite"] }
+thiserror = "1.0.65"
+tokio = { version = "1.41.0", features = ["fs", "net", "rt-multi-thread", "time", "sync", "tracing"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter", "json"] }
+uniffi = "0.28.2"
+
+[dev-dependencies]
+tokio = { version = "1.41.0", features = ["full", "test-util"] }
+
+[build-dependencies]
+uniffi = { version = "0.28.2", features = ["build"] }
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "bin/uniffi-bindgen.rs"
+required-features = ["uniffi-cli"]
