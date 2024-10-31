@@ -1,6 +1,7 @@
 package org.unknownplace.communicator
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,36 +13,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.unknownplace.communicator.ui.theme.CommunicatorTheme
+import uniffi.communicator.Logger
+import uniffi.communicator.initLogger
+
+const val LOGGER_TAG = "Core"
+
+class DebugLogger(): Logger {
+    override fun log(msg: String) {
+        Log.d(LOGGER_TAG, msg)
+    }
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        initLogger(DebugLogger())
+        SharedContext.setContext(applicationContext)
+
         setContent {
             CommunicatorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                CommunicatorGraph()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CommunicatorTheme {
-        Greeting("Android")
     }
 }
